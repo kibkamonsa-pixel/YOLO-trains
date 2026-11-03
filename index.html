@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wildlife AI Studio</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        [hidden] {
+            display: none !important;
+        }
+
+        .error-message {
+            margin-bottom: 18px;
+            padding: 12px 16px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            background: #fff;
+            color: #555;
+            font-size: 12px;
+        }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+            <span>WILDLIFE<span class="blue">.AI</span></span>
+        </div>
+
+        <div class="nav-status">
+            <span class="status-dot"></span>
+            AI SYSTEM ONLINE
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="eyebrow">
+                ✦ INTELLIGENT WILDLIFE DETECTION
+            </div>
+
+            <h1>
+                Discover Wildlife<br>
+                With <span>Artificial Intelligence.</span>
+            </h1>
+
+            <p>
+                Explore the power of AI to detect and segment wildlife
+                with advanced computer vision technology.
+            </p>
+
+            <div class="hero-tags">
+                <span>✧ Object Detection</span>
+                <span>✧ Instance Segmentation</span>
+                <span>✧ YOLO Powered</span>
+            </div>
+        </section>
+
+        <!-- ERROR MESSAGE -->
+        <div
+            class="error-message"
+            id="errorMessage"
+            role="alert"
+            aria-live="polite"
+            hidden>
+        </div>
+
+        <!-- UPLOAD FORM -->
+        <form id="uploadForm">
+
+            <!-- SELECT MODEL -->
+            <section class="panel">
+                <div class="section-heading">
+                    <div>
+                        <span class="step">01 / SELECT MODEL</span>
+                        <h2>Choose your AI mode</h2>
+                        <p>
+                            Select the detection method you want to use.
+                        </p>
+                    </div>
+
+                    <span class="number">01</span>
+                </div>
+
+                <div class="model-grid">
+
+                    <!-- RECTANGLE -->
+                    <label class="model-card active" id="rectangleCard">
+                        <input
+                            type="radio"
+                            name="mode"
+                            value="rectangle"
+                            checked
+                        >
+
+                        <div class="model-icon">▣</div>
+
+                        <div class="model-info">
+                            <h3>Rectangle</h3>
+                            <p>Object Detection</p>
+                        </div>
+
+                        <div class="model-check">✓</div>
+
+                        <div class="model-detail">
+                            Detect objects with bounding boxes.
+                        </div>
+                    </label>
+
+                    <!-- POLYGON -->
+                    <label class="model-card" id="polygonCard">
+                        <input
+                            type="radio"
+                            name="mode"
+                            value="polygon"
+                        >
+
+                        <div class="model-icon polygon-icon">⬡</div>
+
+                        <div class="model-info">
+                            <h3>Polygon</h3>
+                            <p>Instance Segmentation</p>
+                        </div>
+
+                        <div class="model-check">✓</div>
+
+                        <div class="model-detail">
+                            Identify the exact shape of each animal.
+                        </div>
+                    </label>
+
+                </div>
+            </section>
+
+            <!-- UPLOAD IMAGE -->
+            <section class="panel">
+                <div class="section-heading">
+                    <div>
+                        <span class="step">02 / UPLOAD IMAGE</span>
+                        <h2>Upload your wildlife image</h2>
+                        <p>
+                            Choose an image to start AI analysis.
+                        </p>
+                    </div>
+
+                    <span class="number">02</span>
+                </div>
+
+                <label class="upload-area" id="dropArea">
+
+                    <input
+                        type="file"
+                        name="image"
+                        id="imageInput"
+                        accept=".jpg,.jpeg,.png,.webp"
+                        required
+                    >
+
+                    <!-- UPLOAD CONTENT -->
+                    <div id="uploadContent">
+                        <div class="upload-icon">↑</div>
+
+                        <h3>Drop your image here</h3>
+
+                        <p>
+                            or <span>browse files</span> from your computer
+                        </p>
+
+                        <small>
+                            JPG · JPEG · PNG · WEBP | MAX 12 MB
+                        </small>
+                    </div>
+
+                    <!-- IMAGE PREVIEW -->
+                    <div id="previewArea" class="preview-area" hidden>
+                        <img
+                            id="previewImage"
+                            src=""
+                            alt="Image Preview"
+                        >
+
+                        <div class="preview-info">
+                            <strong id="fileName">
+                                Image selected
+                            </strong>
+
+                            <span id="fileSize"></span>
+
+                            <span class="change-image">
+                                Click to change image
+                            </span>
+                        </div>
+                    </div>
+
+                </label>
+
+                <!-- ANALYZE BUTTON -->
+                <button
+                    type="submit"
+                    class="analyze-btn"
+                    id="analyzeBtn"
+                >
+                    <span id="buttonText">
+                        ✦ Analyze with AI
+                    </span>
+
+                    <span class="button-arrow">→</span>
+                </button>
+
+                <p class="secure-note">
+                    ✧ Your image is processed by the AI system.
+                </p>
+            </section>
+
+        </form>
+
+        <!-- RESULTS -->
+        <section class="results-section" id="results" hidden>
+
+            <!-- RESULT HEADING -->
+            <div class="result-heading">
+                <div>
+                    <span class="step">
+                        03 / ANALYSIS COMPLETE
+                    </span>
+
+                    <h2>AI Analysis Results</h2>
+                    <p id="resultMode"></p>
+                </div>
+
+                <div class="complete-badge">
+                    <span></span> COMPLETED
+                </div>
+            </div>
+
+            <!-- STATISTICS -->
+            <div class="stats-grid">
+
+                <!-- TOTAL DETECTIONS -->
+                <div class="stat-card">
+                    <span class="stat-icon">◈</span>
+                    <small>TOTAL DETECTIONS</small>
+                    <strong id="totalCount">0</strong>
+                    <span>Objects detected</span>
+                </div>
+
+                <!-- UNIQUE SPECIES -->
+                <div class="stat-card">
+                    <span class="stat-icon">⌘</span>
+                    <small>UNIQUE SPECIES</small>
+                    <strong id="speciesCount">0</strong>
+                    <span>Different classes</span>
+                </div>
+
+                <!-- DEVICE -->
+                <div class="stat-card">
+                    <span class="stat-icon">⚡</span>
+                    <small>PROCESSING DEVICE</small>
+
+                    <strong class="device-value" id="deviceValue">
+                        CPU
+                    </strong>
+
+                    <span>AI computation</span>
+                </div>
+
+            </div>
+
+            <!-- IMAGE COMPARISON -->
+            <div class="image-grid">
+
+                <!-- ORIGINAL IMAGE -->
+                <div class="image-card">
+                    <div class="image-card-heading">
+                        <span>01</span>
+
+                        <div>
+                            <h3>Original Image</h3>
+                            <p>Source photograph</p>
+                        </div>
+                    </div>
+
+                    <img
+                        id="originalResult"
+                        src=""
+                        alt="Original Image"
+                    >
+                </div>
+
+                <!-- AI RESULT -->
+                <div class="image-card highlighted">
+                    <div class="image-card-heading">
+                        <span>02</span>
+
+                        <div>
+                            <h3>AI Result</h3>
+                            <p>Processed visualization</p>
+                        </div>
+
+                        <span class="ai-label">
+                            AI OUTPUT
+                        </span>
+                    </div>
+
+                    <img
+                        id="processedResult"
+                        src=""
+                        alt="AI Result"
+                    >
+
+                    <a
+                        id="downloadResult"
+                        href="#"
+                        download="wildlife-ai-result.jpg"
+                        class="download-link"
+                    >
+                        ↓ Download Result
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- DETECTION SUMMARY -->
+            <div class="detection-panel">
+                <div class="section-heading">
+                    <div>
+                        <span class="step">
+                            DETECTION SUMMARY
+                        </span>
+
+                        <h2>Detected Wildlife</h2>
+                    </div>
+                </div>
+
+                <!-- SPECIES LIST -->
+                <div id="speciesList"></div>
+
+                <!-- CONFIDENCE -->
+                <div class="confidence-list" id="confidenceList">
+                    <h3>Detection Confidence</h3>
+                    <div id="confidenceItems"></div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-brand">
+                WILDLIFE<span class="blue">.AI</span>
+            </div>
+
+            <p>
+                Powered by YOLO · Intelligent Wildlife Recognition
+            </p>
+
+            <span>
+                AI VISION SYSTEM © 2026
+            </span>
+        </footer>
+
+    </main>
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        // =====================================
+        // BACKEND URL
+        // =====================================
+
+        // เปลี่ยนเป็น URL Render ของ Backend ของคุณ
+        const API_BASE_URL = "PASTE_YOUR_RENDER_URL_HERE";
+
+
+        // =====================================
+        // ELEMENTS
+        // =====================================
+
+        const form = document.getElementById("uploadForm");
+        const imageInput = document.getElementById("imageInput");
+        const dropArea = document.getElementById("dropArea");
+        const uploadContent = document.getElementById("uploadContent");
+        const previewArea = document.getElementById("previewArea");
+        const previewImage = document.getElementById("previewImage");
+
+        const rectangleCard = document.getElementById("rectangleCard");
+        const polygonCard = document.getElementById("polygonCard");
+
+        const analyzeBtn = document.getElementById("analyzeBtn");
+        const buttonText = document.getElementById("buttonText");
+        const errorMessage = document.getElementById("errorMessage");
+
+        let previewUrl = null;
+
+
+        // =====================================
+        // ERROR MESSAGE
+        // =====================================
+
+        function showError(message) {
+            errorMessage.textContent = "⚠ " + message;
+            errorMessage.hidden = false;
+
+            errorMessage.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+
+        function clearError() {
+            errorMessage.hidden = true;
+            errorMessage.textContent = "";
+        }
+
+
+        // =====================================
+        // SELECT MODEL
+        // =====================================
+
+        function selectModel() {
+            const selected = document.querySelector(
+                'input[name="mode"]:checked'
+            ).value;
+
+            rectangleCard.classList.toggle(
+                "active",
+                selected === "rectangle"
+            );
+
+            polygonCard.classList.toggle(
+                "active",
+                selected === "polygon"
+            );
+        }
+
+
+        document.querySelectorAll('input[name="mode"]').forEach(input => {
+            input.addEventListener("change", selectModel);
+        });
+
+
+        // =====================================
+        // IMAGE PREVIEW
+        // =====================================
+
+        function resetPreview() {
+
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+                previewUrl = null;
+            }
+
+            previewImage.removeAttribute("src");
+            previewArea.hidden = true;
+            uploadContent.hidden = false;
+
+        }
+
+
+        function showPreview(file) {
+
+            if (!file) return;
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+                showError("รองรับเฉพาะ JPG, PNG และ WEBP");
+                imageInput.value = "";
+                resetPreview();
+                return;
+            }
+
+            if (file.size > 12 * 1024 * 1024) {
+                showError("ขนาดภาพต้องไม่เกิน 12 MB");
+                imageInput.value = "";
+                resetPreview();
+                return;
+            }
+
+            clearError();
+
+            // ซ่อนผลลัพธ์เก่าเมื่อเลือกรูปใหม่
+            document.getElementById("results").hidden = true;
+
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+            }
+
+            previewUrl = URL.createObjectURL(file);
+            previewImage.src = previewUrl;
+
+            document.getElementById("fileName").textContent = file.name;
+
+            document.getElementById("fileSize").textContent =
+                (file.size / 1024 / 1024).toFixed(2) + " MB";
+
+            uploadContent.hidden = true;
+            previewArea.hidden = false;
+
+        }
+
+
+        imageInput.addEventListener("change", function() {
+            showPreview(this.files[0]);
+        });
+
+
+        // =====================================
+        // DRAG AND DROP
+        // =====================================
+
+        ["dragenter", "dragover"].forEach(eventName => {
+
+            dropArea.addEventListener(eventName, event => {
+                event.preventDefault();
+                dropArea.classList.add("dragging");
+            });
+
+        });
+
+
+        ["dragleave", "drop"].forEach(eventName => {
+
+            dropArea.addEventListener(eventName, event => {
+                event.preventDefault();
+                dropArea.classList.remove("dragging");
+            });
+
+        });
+
+
+        dropArea.addEventListener("drop", event => {
+
+            const file = event.dataTransfer.files[0];
+
+            if (!file) return;
+
+            const transfer = new DataTransfer();
+            transfer.items.add(file);
+
+            imageInput.files = transfer.files;
+
+            showPreview(file);
+
+        });
+
+
+        // =====================================
+        // DISPLAY RESULTS
+        // =====================================
+
+        function renderResults(data) {
+
+            // MODE
+            document.getElementById("resultMode").textContent =
+                data.mode;
+
+
+            // STATISTICS
+            document.getElementById("totalCount").textContent =
+                data.total;
+
+            document.getElementById("speciesCount").textContent =
+                Object.keys(data.counts || {}).length;
+
+            document.getElementById("deviceValue").textContent =
+                data.device;
+
+
+            // ORIGINAL IMAGE
+            document.getElementById("originalResult").src =
+                data.original;
+
+
+            // PROCESSED IMAGE
+            document.getElementById("processedResult").src =
+                data.processed;
+
+
+            // DOWNLOAD
+            document.getElementById("downloadResult").href =
+                data.processed;
+
+
+            // =================================
+            // SPECIES LIST
+            // =================================
+
+            const speciesList = document.getElementById("speciesList");
+
+            speciesList.replaceChildren();
+
+            const species = Object.entries(data.counts || {});
+
+
+            if (species.length === 0) {
+
+                const empty = document.createElement("p");
+
+                empty.className = "empty-result";
+
+                empty.textContent =
+                    "No wildlife detected in this image.";
+
+                speciesList.appendChild(empty);
+
+            } else {
+
+                species.forEach(([name, count]) => {
+
+                    const row = document.createElement("div");
+
+                    row.className = "species-row";
+
+
+                    const speciesName = document.createElement("div");
+
+                    speciesName.className = "species-name";
+
+
+                    const dot = document.createElement("span");
+
+                    dot.className = "species-dot";
+
+
+                    speciesName.append(
+                        dot,
+                        document.createTextNode(name)
+                    );
+
+
+                    const amount = document.createElement("div");
+
+                    amount.className = "species-count";
+
+                    amount.textContent = count + " detected";
+
+
+                    row.append(speciesName, amount);
+
+                    speciesList.appendChild(row);
+
+                });
+
+            }
+
+
+            // =================================
+            // CONFIDENCE LIST
+            // =================================
+
+            const confidenceList =
+                document.getElementById("confidenceList");
+
+            const confidenceItems =
+                document.getElementById("confidenceItems");
+
+            confidenceItems.replaceChildren();
+
+            const detections = data.detections || [];
+
+
+            detections.forEach(item => {
+
+                const wrap = document.createElement("div");
+
+                wrap.className = "confidence-item";
+
+
+                const top = document.createElement("div");
+
+                top.className = "confidence-top";
+
+
+                const name = document.createElement("span");
+
+                name.textContent = item.name;
+
+
+                const value = document.createElement("strong");
+
+                value.textContent = item.confidence + "%";
+
+
+                top.append(name, value);
+
+
+                const track = document.createElement("div");
+
+                track.className = "progress-track";
+
+
+                const fill = document.createElement("div");
+
+                fill.className = "progress-fill";
+
+
+                const confidence = Math.max(
+                    0,
+                    Math.min(100, Number(item.confidence) || 0)
+                );
+
+                fill.style.width = confidence + "%";
+
+
+                track.appendChild(fill);
+
+                wrap.append(top, track);
+
+                confidenceItems.appendChild(wrap);
+
+            });
+
+
+            confidenceList.hidden = detections.length === 0;
+
+
+            // SHOW RESULTS
+            const results = document.getElementById("results");
+
+            results.hidden = false;
+
+            results.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }
+
+
+        // =====================================
+        // SEND IMAGE TO BACKEND
+        // =====================================
+
+        form.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            clearError();
+
+            const file = imageInput.files[0];
+
+
+            if (!file) {
+                showError("กรุณาเลือกรูปภาพก่อนวิเคราะห์");
+                return;
+            }
+
+
+            if (API_BASE_URL.includes("PASTE_YOUR_RENDER_URL_HERE")) {
+
+                showError(
+                    "กรุณาตั้งค่า URL ของ Backend จาก Render ในไฟล์ index.html ก่อน"
+                );
+
+                return;
+
+            }
+
+
+            // BUTTON LOADING
+            analyzeBtn.disabled = true;
+
+            analyzeBtn.classList.add("loading");
+
+            buttonText.textContent =
+                "AI is analyzing your image...";
+
+
+            try {
+
+                // CREATE FORM DATA
+                const formData = new FormData();
+
+                const selectedMode = document.querySelector(
+                    'input[name="mode"]:checked'
+                ).value;
+
+
+                formData.append("image", file);
+
+                formData.append("mode", selectedMode);
+
+
+                // CALL FLASK API
+                const response = await fetch(
+                    `${API_BASE_URL.replace(/\/$/, "")}/api/predict`,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+                let data;
+
+                try {
+                    data = await response.json();
+                } catch {
+                    throw new Error(
+                        "Backend ส่งข้อมูลกลับมาไม่ถูกต้อง กรุณาตรวจสอบ Render Logs"
+                    );
+                }
+
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.error || data.message || "ไม่สามารถวิเคราะห์ภาพได้"
+                    );
+                }
+
+
+                if (!data.original || !data.processed) {
+                    throw new Error(
+                        "Backend ไม่ได้ส่งภาพผลลัพธ์กลับมา กรุณาตรวจสอบ API"
+                    );
+                }
+
+
+                // DISPLAY RESULT
+                renderResults(data);
+
+
+            } catch (error) {
+
+                showError(
+                    error.message || "ไม่สามารถเชื่อมต่อ Backend ได้"
+                );
+
+
+            } finally {
+
+                // RESET BUTTON
+                analyzeBtn.disabled = false;
+
+                analyzeBtn.classList.remove("loading");
+
+                buttonText.textContent =
+                    "✦ Analyze with AI";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
